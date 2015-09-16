@@ -62,6 +62,12 @@ Theme.set({
 		}
 	},
 
+	'ControlTextEntryOverlay .ControlTextButton': {
+		styles: {
+			marginLeft: 800
+		}
+	},
+
 	'TrickPlay .ControlMediaTransportOverlayBody .ControlMediaTransportOverlayControlBar': {
 		styles: {
 			display: 'inline-block'

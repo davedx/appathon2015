@@ -34,7 +34,7 @@ var transportOverlay = new MAF.Class({
 				forwardButton: true // Enable the "fast forward" button
 			}).appendTo(view);
 
-		var bigSize = 26;
+		var bigSize = 30;
 		var t1Size = 16;
 		var t2Size = 14;
 		var dividerTop = (view.height - 100) + 0.5*bigSize + 5;

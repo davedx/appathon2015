@@ -55,7 +55,11 @@ var ArtistEvents = new MAF.Class({
 				var id = json.events.event[0].id;
 				for(var i=0; i<events.length; i++) {
 					events[i].image = fakeEvents[i].image;
-					events[i].friends = friendsAttending;
+					if(i === 0) {
+						events[i].friends = friendsAttending;
+					} else {
+						events[i].friends = friendsAttending.slice(0,1);
+					}
 				}
 				view.elements.elementGrid.changeDataset(events, true);
 			},
@@ -304,7 +308,8 @@ var ArtistEvents = new MAF.Class({
 				cell.title.setText(data.title);
 				cell.date.setText(data.start_time);
 				cell.image.setSource(data.image);
-				cell.friendsTitle.setText(data.friends.length + " Friends Are Going");
+				var word = data.friends.length === 1 ? "Friend Is" : "Friends Are";
+				cell.friendsTitle.setText(data.friends.length + " " + word + " Going");
 				for(var i=0; i<data.friends.length; i++) {
 					if(i < 5) {
 						cell.friends[i].setSource("http://graph.facebook.com/" + data.friends[i].id + "/picture?type=square");
