@@ -2,6 +2,7 @@ var fakeMenuLabels = ["INFO", "LEAVE APPLICATION", "RELATED", "FILM & ANIMATION"
 
 var fakeVideos = [{
 	title: "Kensington - Home Again",
+	artist: "Kensington",
 	id: "d-XEiTf4LW8",
 	image: "https://i.ytimg.com/vi/d-XEiTf4LW8/mqdefault.jpg",
 	uploaded: "15 May 2015",
@@ -9,6 +10,7 @@ var fakeVideos = [{
 },
 {
 	title: "Official Aftermovie | Dance Valley 2014",
+	artist: "Dance Valley",
 	id: "8tTKX3NJ6wQ",
 	image: "https://i.ytimg.com/vi/8tTKX3NJ6wQ/mqdefault.jpg",
 	uploaded: "13 Sep 2014",
@@ -16,6 +18,7 @@ var fakeVideos = [{
 },
 {
 	title: "Oscar and The Wolf FREED FROM DESIRE",
+	artist: "Oscar and The Wolf",
 	id: "SM9rozU1-VI",
 	image: "https://i.ytimg.com/vi/SM9rozU1-VI/mqdefault.jpg",
 	uploaded: "21 Sep 2014",
@@ -23,6 +26,7 @@ var fakeVideos = [{
 },
 {
 	title: "Lianne La Havas – Unstoppable",
+	artist: "Lianne La Havas",
 	id: "S3fTw_D3l10",
 	image: "https://i.ytimg.com/vi/YFic-xaLsPs/mqdefault.jpg",
 	uploaded: "12 May 2015",
@@ -77,7 +81,7 @@ var MainView = new MAF.Class({
 					styles: this.getCellDimensions(),
 					events:{
 						onSelect: function () {
-							MAF.application.loadView('view-transportOverlay', { id: this.ytid });
+							MAF.application.loadView('view-transportOverlay', { id: this.ytid, artist: this.ytartist });
 						},
 						onFocus: function () {
 							this.animate({backgroundColor: 'white',	duration: 0.3});
@@ -141,6 +145,7 @@ var MainView = new MAF.Class({
 			},
 			cellUpdater: function (cell, data) {
 				cell.ytid = data.id;
+				cell.ytartist = data.artist;
 				cell.title.setText(data.title);
 				cell.uploaded.setText(data.uploaded);
 				cell.description.setText(data.description);

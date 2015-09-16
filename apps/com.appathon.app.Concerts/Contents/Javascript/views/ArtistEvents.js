@@ -1,7 +1,7 @@
 var fakeEvents = [{
 	title: "Kensington - Pinkpop",
 	date: "Jun 14th, Landgraaf",
-	image: "./images/kensington.jpg",
+	image: "./images/kensington1.jpg",
 	friends: {
 		title: "4 Friends Are Going",
 		friends: ["Dave", "Dave"]
@@ -9,7 +9,7 @@ var fakeEvents = [{
 }, {
 	title: "Kensington - Ancienne Belgique",
 	date: "November 13th, Brussels",
-	image: "./images/kensington.jpg",
+	image: "./images/kensington2.png",
 	friends: {
 		title: "4 Friends Are Going",
 		friends: ["Dave", "Dave"]
@@ -17,7 +17,7 @@ var fakeEvents = [{
 }, {
 	title: "Kensington - Ziggo Dome",
 	date: "November 25th, Amsterdam",
-	image: "./images/kensington.jpg",
+	image: "./images/kensington3.png",
 	friends: {
 		title: "4 Friends Are Going",
 		friends: ["Dave", "Dave"]
@@ -28,6 +28,45 @@ var ArtistEvents = new MAF.Class({
 	ClassName: 'ArtistEventsView',
 
 	Extends: MAF.system.FullscreenView,
+
+	loadFriendsAttending: function(artist, friends) {
+		var view = this;
+		Facebook.api('/1543400192610987/attending', function(result) {
+			var friendsAttending = [];
+			for(var i=0; i<result.data.length; i++) {
+				for(var j=0; j<friends.length; j++) {
+					if(friends[j].id === result.data[i].id) {
+						friendsAttending.push(friends[j]);
+					}
+				}
+			}
+			console.log("friendsAttending: ", friendsAttending);
+			view.loadEvents(artist, friendsAttending);
+		});
+	},
+
+	loadEvents: function(artist, friendsAttending) {
+		var view = this;
+		new Request({
+			url: 'http://api.eventful.com/json/events/search?app_key=fzbH4mzf75pTXR9F&keywords='+artist+'&location=Netherlands',
+			onSuccess: function (json) {
+				console.log("res: ", json);
+				var events = json.events.event.slice(0, 3);
+				var id = json.events.event[0].id;
+				for(var i=0; i<events.length; i++) {
+					events[i].image = fakeEvents[i].image;
+					events[i].friends = friendsAttending;
+				}
+				view.elements.elementGrid.changeDataset(events, true);
+			},
+			onFailure: function (error) {
+				console.log('failure', error);
+			},
+			onError: function (error) {
+				console.log('error', error);
+			}
+		}).send();
+	},
 
 	initialize: function () {
 		this.parent();
@@ -139,6 +178,48 @@ var ArtistEvents = new MAF.Class({
 					}
 				}).appendTo(cell);
 
+				cell.friends = [];
+				cell.friends[0] = new MAF.element.Image({
+					styles: {
+						hOffset: cell.height + 50,
+						vOffset: 190,
+						width: 50,
+						height: 50
+					}
+				}).appendTo(cell);
+				cell.friends[1] = new MAF.element.Image({
+					styles: {
+						hOffset: cell.height + 50 + 60,
+						vOffset: 190,
+						width: 50,
+						height: 50
+					}
+				}).appendTo(cell);
+				cell.friends[2] = new MAF.element.Image({
+					styles: {
+						hOffset: cell.height + 50 + 120,
+						vOffset: 190,
+						width: 50,
+						height: 50
+					}
+				}).appendTo(cell);
+				cell.friends[3] = new MAF.element.Image({
+					styles: {
+						hOffset: cell.height + 50 + 180,
+						vOffset: 190,
+						width: 50,
+						height: 50
+					}
+				}).appendTo(cell);
+				cell.friends[4] = new MAF.element.Image({
+					styles: {
+						hOffset: cell.height + 50 + 240,
+						vOffset: 190,
+						width: 50,
+						height: 50
+					}
+				}).appendTo(cell);
+
 				cell.image = new MAF.element.Image({
 					styles: {
 						width: cell.height,
@@ -222,9 +303,13 @@ var ArtistEvents = new MAF.Class({
 			cellUpdater: function (cell, data) {
 				cell.title.setText(data.title);
 				cell.date.setText(data.start_time);
-				cell.image.setSource("./images/kensington.jpg"); //TODO?
-				cell.friendsTitle.setText("4 Friends Are Going");
-				//cell.friends.setText(data.friends);
+				cell.image.setSource(data.image);
+				cell.friendsTitle.setText(data.friends.length + " Friends Are Going");
+				for(var i=0; i<data.friends.length; i++) {
+					if(i < 5) {
+						cell.friends[i].setSource("http://graph.facebook.com/" + data.friends[i].id + "/picture?type=square");
+					}
+				}
 			}
 		}).appendTo(view);
 
@@ -400,20 +485,13 @@ var ArtistEvents = new MAF.Class({
 	updateView: function () {
 		var view = this;
 		log("persist: ", this.persist);
+		var artist = this.persist.artist;
 
-		new Request({
-			url: 'http://api.eventful.com/json/events/search?app_key=fzbH4mzf75pTXR9F&keywords=Kensington&location=Netherlands',
-			onSuccess: function (json) {
-				log("res: ", json);
-				var events = json.events.event.slice(0, 3);
-				view.elements.elementGrid.changeDataset(events, true);
-			},
-			onFailure: function (error) {
-				console.log('failure', error);
-			},
-			onError: function (error) {
-				console.log('error', error);
-			}
-		}).send();
+		Facebook.api('/me/friends', function(result) {
+			log('The result:', result);
+
+			var friends = result.data;
+			view.loadFriendsAttending(artist, friends);
+		});
 	}
 });

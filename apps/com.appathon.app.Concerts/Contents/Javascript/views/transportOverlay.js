@@ -39,13 +39,15 @@ var transportOverlay = new MAF.Class({
 		var t2Size = 14;
 		var dividerTop = (view.height - 100) + 0.5*bigSize + 5;
 		var navId = this.persist.id;
+		var artist = this.persist.artist;
+		log(this.persist);
 		var okBtn = new MAF.control.TextButton({
 			label: "OK",
 			ClassName: "YTButton",
-			events:{
+			events: {
 				onSelect: function () {
 					log("select - going to "+navId);
-					MAF.application.loadView('view-ArtistEvents', { id: navId });
+					MAF.application.loadView('view-ArtistEvents', { id: navId, artist: artist });
 				}
 			},
 			styles: {
@@ -79,9 +81,9 @@ var transportOverlay = new MAF.Class({
 		}).appendTo(view);
 
 		new MAF.element.Text({
-			label: "Friday April 2nd Live at Ziggo Dome",
+			label: "November 25th Live at Ziggo Dome",
 			styles: {
-				top: 17,
+				top: 15,
 				width: 369,
 				height: 20,
 				fontSize: t1Size,
@@ -91,7 +93,7 @@ var transportOverlay = new MAF.Class({
 		}).appendTo(btn);
 
 		new MAF.element.Text({
-			label: "6 Friends Are Going",
+			label: "2 Friends Are Going",
 			styles: {
 				top: 42,
 				width: 369,
