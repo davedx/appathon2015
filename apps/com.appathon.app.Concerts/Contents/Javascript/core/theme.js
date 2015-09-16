@@ -14,6 +14,45 @@ Theme.set({
 		}
 	},
 
+	'YTFormButton': {
+		normal: {
+			styles: {
+				color: "white",
+				backgroundColor: "#b6b5b5",
+			}
+		},
+		focused: {
+			styles: {
+				color: "white",
+				backgroundColor: "#444",
+			}
+		}
+	},
+
+	'YTOrderButton': {
+		normal: {
+			styles: {
+				color: '#5d5d5d',
+				backgroundColor: "white",
+			}
+		},
+		focused: {
+			styles: {
+				color: 'white',
+				backgroundColor: '#5d5d5d'
+			}
+		}
+	},
+
+	'ControlTextEntryButtonValueTheme': {
+		styles: {
+			border: 'none !important',
+			borderRadius: '0 !important',
+			backgroundColor: 'transparent !important',
+			paddingTop: 9
+		}
+	},
+
 	'TrickPlay .ControlMediaTransportOverlayBody': {
 		styles: {
 			backgroundColor: 'inherit !important',

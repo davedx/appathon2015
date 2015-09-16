@@ -52,16 +52,16 @@ var ArtistEvents = new MAF.Class({
 			styles: {
 				top: 80,
 				left: 80,
-				fontSize: 35,
+				fontSize: 45,
 				color: "#5d5d5d"
 			}
 		}).appendTo(view);
-//660x155
+
 		var elementGrid = view.elements.elementGrid = new MAF.element.Grid({
 			rows: 3,
 			columns: 1,
 			styles: {
-				width: view.width - 800,
+				width: view.width - 910,
 				height: view.height - 300,
 				hOffset: 80,
 				vOffset: 187
@@ -71,6 +71,10 @@ var ArtistEvents = new MAF.Class({
 					styles: this.getCellDimensions(),
 					events:{
 						onSelect: function () {
+							view.form.show();
+							view.firstName.focus();
+							//view.elements.elementGrid.freeze();
+							view.elements.overlay.show();
 							//MAF.application.loadView('view-transportOverlay', { id: this.ytid });
 							//TODO: buy action
 						},
@@ -101,7 +105,7 @@ var ArtistEvents = new MAF.Class({
 
 				cell.title = new MAF.element.Text({
 					styles: {
-						width: cell.width - 250,
+						width: cell.width - 450,
 						height: 40,
 						color: '#5d5d5d',
 						fontSize: 30,
@@ -113,7 +117,7 @@ var ArtistEvents = new MAF.Class({
 
 				cell.date = new MAF.element.Text({
 					styles: {
-						width: cell.width - 250,
+						width: cell.width - 450,
 						height: 35,
 						color: '#5d5d5d',
 						fontSize: 25,
@@ -125,7 +129,7 @@ var ArtistEvents = new MAF.Class({
 
 				cell.friendsTitle = new MAF.element.Text({
 					styles: {
-						width: cell.width - 250,
+						width: cell.width - 450,
 						height: 50,
 						color: '#5d5d5d',
 						fontSize: 20,
@@ -175,7 +179,7 @@ var ArtistEvents = new MAF.Class({
 					styles: {
 						top: 20 + buttonSize + 2,
 						left: cell.width - (buttonSize+20),
-						width: buttonSize,
+						width: buttonSize+10,
 						height: 20,
 						fontSize: 16,
 						color: '#5d5d5d',
@@ -217,22 +221,199 @@ var ArtistEvents = new MAF.Class({
 			},
 			cellUpdater: function (cell, data) {
 				cell.title.setText(data.title);
-				cell.date.setText(data.date);
-				cell.image.setSource(data.image);
-				cell.friendsTitle.setText(data.friends.title);
+				cell.date.setText(data.start_time);
+				cell.image.setSource("./images/kensington.jpg"); //TODO?
+				cell.friendsTitle.setText("4 Friends Are Going");
 				//cell.friends.setText(data.friends);
 			}
 		}).appendTo(view);
+
+		view.elements.overlay = new MAF.element.Container({
+			styles: {
+				width: view.width - 910,
+				height: view.height - 300,
+				hOffset: 80,
+				vOffset: 187,
+				backgroundColor: "rgba(0, 0, 0, 0.6)",
+				visible: false
+			}
+		}).appendTo(view);
+
+		new MAF.element.Text({
+			label: "",
+			styles: {
+				top: 177,
+				left: view.width - 790,
+				width: 2,
+				height: view.height - 280,
+				backgroundColor: "#5d5d5d"
+			}
+		}).appendTo(view);
+
+		var form = new MAF.element.Text({
+			label: "",
+			styles: {
+				top: 187,
+				left: view.width - 750,
+				width: 570,
+				height: view.height - 300,
+				backgroundColor: "white",
+				visible: false
+			}
+		}).appendTo(view);
+
+		new MAF.element.Text({
+			label: "TICKETS",
+			styles: {
+				top: 20,
+				left: 0,
+				width: form.width,
+				height: 40,
+				fontSize: 45,
+				anchorStyle: 'center',
+				color: "#5d5d5d"
+			}
+		}).appendTo(form);
+
+		var formLeft = 40;
+
+		new MAF.element.Text({
+			label: "First Name",
+			styles: {
+				top: 150,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 30,
+				fontSize: 25,
+				color: "#5d5d5d"
+			}
+		}).appendTo(form);
+
+		this.firstName = new MAF.control.TextEntryButton({
+			ClassName: 'YTFormButton',
+			styles: {
+				top: 190,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 65,
+				fontSize: 20,
+				color: 'white'
+			},
+			textStyles: {
+				paddingLeft: 15,
+				paddingTop: 18,
+				width: "inherit",
+				height: "inherit"
+			},
+			events: {
+				onNavigate: function(event){
+					event.stop();
+					switch(event.payload.direction){
+						case "down":
+							view.secondName.focus();
+						break;
+					}
+				}
+			}
+		}).appendTo(form);
+
+		new MAF.element.Text({
+			label: "Second Name",
+			styles: {
+				top: 300,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 30,
+				fontSize: 25,
+				color: "#5d5d5d"
+			}
+		}).appendTo(form);
+
+		this.secondName = new MAF.control.TextEntryButton({
+			ClassName: 'YTFormButton',
+			styles: {
+				top: 340,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 65,
+				fontSize: 20,
+				color: 'white'
+			},
+			textStyles: {
+				paddingLeft: 15,
+				paddingTop: 18,
+				width: "inherit",
+				height: "inherit"
+			}
+		}).appendTo(form);
+
+		new MAF.element.Text({
+			label: "Bank Account",
+			styles: {
+				top: 450,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 30,
+				fontSize: 25,
+				color: "#5d5d5d"
+			}
+		}).appendTo(form);
+
+		this.bankAccount = new MAF.control.TextEntryButton({
+			ClassName: 'YTFormButton',
+			styles: {
+				top: 490,
+				left: formLeft,
+				width: form.width - formLeft*2,
+				height: 65,
+				fontSize: 20,
+				color: 'white'
+			},
+			textStyles: {
+				paddingLeft: 15,
+				paddingTop: 18,
+				width: "inherit",
+				height: "inherit"
+			}
+		}).appendTo(form);
+
+		this.orderBtn = new MAF.control.TextButton({
+			ClassName: 'YTOrderButton',
+			label: "OK",
+			styles: {
+				top: 630,
+				left: formLeft + 100,
+				width: form.width - (100+formLeft)*2,
+				height: 65,
+				fontSize: 45
+			},
+			textStyles: {
+				width: "inherit",
+				height: "inherit",
+				anchorStyle: "center",
+			}
+		}).appendTo(form);
+
+		this.form = form;
 	},
 
 	updateView: function () {
 		var view = this;
 		log("persist: ", this.persist);
-		view.elements.elementGrid.changeDataset(fakeEvents, true);
-		// Facebook.reset();
-		// Facebook.api('me', function(result) {
-		//    //Received a response from Facebook API.
-		//    log('The result:', result);
-		// });
+
+		new Request({
+			url: 'http://api.eventful.com/json/events/search?app_key=fzbH4mzf75pTXR9F&keywords=Kensington&location=Netherlands',
+			onSuccess: function (json) {
+				log("res: ", json);
+				var events = json.events.event.slice(0, 3);
+				view.elements.elementGrid.changeDataset(events, true);
+			},
+			onFailure: function (error) {
+				console.log('failure', error);
+			},
+			onError: function (error) {
+				console.log('error', error);
+			}
+		}).send();
 	}
 });
