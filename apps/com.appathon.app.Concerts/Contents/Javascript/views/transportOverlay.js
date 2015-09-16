@@ -93,7 +93,7 @@ var transportOverlay = new MAF.Class({
 		}).appendTo(btn);
 
 		new MAF.element.Text({
-			label: "2 Friends Are Going",
+			label: "3 Friends Are Going",
 			styles: {
 				top: 42,
 				width: 369,
